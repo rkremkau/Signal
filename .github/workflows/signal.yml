@@ -38,9 +38,11 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin main
           mkdir -p archive
           cp index.html archive/$(date +'%Y-%m-%d').html
+          git stash
+          git pull --rebase origin main
+          git stash pop
           git add index.html signal.json archive/
           git diff --staged --quiet && exit 0
           git commit -m "signal: $(date +'%Y-%m-%d')"
