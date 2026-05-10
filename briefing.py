@@ -43,9 +43,9 @@ and want to stay sharp for customer conversations and internal teams.
 """
 
 HOBBY_CONTEXT = """
-Lower priority but include if genuinely interesting:
-SFF PC builds, HiFi audio (KEF, Focal, SVS), gaming hardware,
+Include if tech-relevant: SFF PC builds, HiFi audio (KEF, Focal, SVS), gaming hardware,
 EV/car tech, motorcycle electronics, World of Warcraft patches.
+Score these the same as any other content — no artificial cap.
 """
 
 # ── SOURCES ───────────────────────────────────────────────────────────────────
@@ -66,16 +66,16 @@ SOURCES = [
     {"name": "The Register",    "tier": 3, "cat": "industry", "url": "https://www.theregister.com/headlines.atom"},
     {"name": "MIT Tech Review", "tier": 2, "cat": "ai",       "url": "https://www.technologyreview.com/feed/"},
     # ── YouTube ───────────────────────────────────────────────────────────────
-    {"name": "Linus Tech Tips", "tier": 2, "cat": "industry", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCXuqSBlHAE6Xw-yeJA0Tunw"},
-    {"name": "TechLinked",      "tier": 2, "cat": "industry", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCeeFfhMcJa1kjtfZAGskOCA"},
-    {"name": "The WAN Show",    "tier": 2, "cat": "industry", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCFLFc8Lpbwt4jPtY1_Ai5yA"},
-    {"name": "MKBHD",           "tier": 2, "cat": "industry", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBJycsmduvYEL83R_U4JriQ"},
-    {"name": "Max Tech",        "tier": 2, "cat": "apple",    "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCptwuAv0XQHo1OQUSaO6NHw"},
-    {"name": "Alex Ziskind",    "tier": 1, "cat": "dev",      "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCajiMK_CY9icRhLepS8_3ug"},
-    {"name": "NetworkChuck",    "tier": 2, "cat": "dev",      "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC9x0AN7BWHpCDHSm9NiJFJQ"},
-    {"name": "Snazzy Labs",     "tier": 2, "cat": "apple",    "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCO2x-p9gg9TLKneXlibGR7w"},
-    {"name": "Dave2D",          "tier": 2, "cat": "apple",    "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCVYamHliCI9rw1tHR1xbkfw"},
-    {"name": "Fireship",        "tier": 2, "cat": "dev",      "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs9EqgamOA"},
+    {"name": "Linus Tech Tips", "tier": 2, "cat": "industry", "type": "video", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCXuqSBlHAE6Xw-yeJA0Tunw"},
+    {"name": "TechLinked",      "tier": 2, "cat": "industry", "type": "video", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCeeFfhMcJa1kjtfZAGskOCA"},
+    {"name": "The WAN Show",    "tier": 2, "cat": "industry", "type": "video", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCFLFc8Lpbwt4jPtY1_Ai5yA"},
+    {"name": "MKBHD",           "tier": 2, "cat": "industry", "type": "video", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBJycsmduvYEL83R_U4JriQ"},
+    {"name": "Max Tech",        "tier": 2, "cat": "apple",    "type": "video", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCptwuAv0XQHo1OQUSaO6NHw"},
+    {"name": "Alex Ziskind",    "tier": 1, "cat": "dev",      "type": "video", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCajiMK_CY9icRhLepS8_3ug"},
+    {"name": "NetworkChuck",    "tier": 2, "cat": "dev",      "type": "video", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC9x0AN7BWHpCDHSm9NiJFJQ"},
+    {"name": "Snazzy Labs",     "tier": 2, "cat": "apple",    "type": "video", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCO2x-p9gg9TLKneXlibGR7w"},
+    {"name": "Dave2D",          "tier": 2, "cat": "apple",    "type": "video", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCVYamHliCI9rw1tHR1xbkfw"},
+    {"name": "Fireship",        "tier": 2, "cat": "dev",      "type": "video", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs9EqgamOA"},
 ]
 
 ITEMS_PER_FEED = 8
@@ -124,6 +124,7 @@ def fetch_feeds():
                     "source":    src["name"],
                     "tier":      src["tier"],
                     "cat":       src["cat"],
+                    "type":      src.get("type", "article"),
                     "summary":   summary,
                     "pubDate":   pub,
                     "score":     None,
@@ -157,7 +158,7 @@ def score_batch(client, articles):
 USER PROFILE:
 {PROFILE.strip()}
 
-HOBBY TECH (much lower priority, max score 60):
+HOBBY TECH (include if tech-relevant, score naturally):
 {HOBBY_CONTEXT.strip()}
 
 SCORING:
@@ -330,7 +331,7 @@ def render_html(articles, output_path):
   .foot {{ display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }}
   .src {{ font-family: var(--mono); font-size: 10px; color: var(--muted); padding: 2px 6px; border-radius: 3px; background: var(--surface2); }}
   .tag {{ font-family: var(--mono); font-size: 10px; color: var(--accent); padding: 2px 6px; border-radius: 3px; background: rgba(110,106,255,0.08); }}
-  .why {{ font-family: var(--mono); font-size: 10px; color: var(--muted); font-style: italic; margin-left: auto; text-align: right; max-width: 200px; }}
+  .yt {{ font-family: var(--mono); font-size: 10px; color: #ff4444; padding: 2px 6px; border-radius: 3px; background: rgba(255,68,68,0.1); }}
   .stats {{ font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 18px; padding: 10px 14px; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); display: flex; gap: 20px; flex-wrap: wrap; }}
   .stats span {{ color: var(--text); }}
 </style>
@@ -389,7 +390,7 @@ function render() {{
     return `<div class="fi">
       <div class="it"><span class="sp ${{sc}}">${{it.score}}</span><div class="tti">${{title}}</div></div>
       <div class="sm">${{esc(it.aiSummary||it.summary||'')}}</div>
-      <div class="foot"><span class="src">${{esc(it.source)}}</span>${{tags}}${{it.why?`<span class="why">${{esc(it.why)}}</span>`:''}}</div>
+      <div class="foot"><span class="src">${{esc(it.source)}}</span>${{it.type==='video'?'<span class="yt">&#9654; video</span>':''}}${{tags}}${{it.why?`<span class="why">${{esc(it.why)}}</span>`:''}}</div>
     </div>`;
   }}).join('');
 }}
