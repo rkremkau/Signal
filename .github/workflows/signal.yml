@@ -41,5 +41,7 @@ jobs:
           mkdir -p archive
           cp index.html archive/$(date +'%Y-%m-%d').html
           git add index.html signal.json archive/
-          git diff --staged --quiet || git commit -m "signal: $(date +'%Y-%m-%d')"
+          git diff --staged --quiet && exit 0
+          git pull --rebase origin main
+          git commit -m "signal: $(date +'%Y-%m-%d')"
           git push
