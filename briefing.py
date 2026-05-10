@@ -65,6 +65,17 @@ SOURCES = [
     {"name": "Wired",           "tier": 3, "cat": "industry", "url": "https://www.wired.com/feed/rss"},
     {"name": "The Register",    "tier": 3, "cat": "industry", "url": "https://www.theregister.com/headlines.atom"},
     {"name": "MIT Tech Review", "tier": 2, "cat": "ai",       "url": "https://www.technologyreview.com/feed/"},
+    # ── YouTube ───────────────────────────────────────────────────────────────
+    {"name": "Linus Tech Tips", "tier": 2, "cat": "industry", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCXuqSBlHAE6Xw-yeJA0Tunw"},
+    {"name": "TechLinked",      "tier": 2, "cat": "industry", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCeeFfhMcJa1kjtfZAGskOCA"},
+    {"name": "The WAN Show",    "tier": 2, "cat": "industry", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCFLFc8Lpbwt4jPtY1_Ai5yA"},
+    {"name": "MKBHD",           "tier": 2, "cat": "industry", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBJycsmduvYEL83R_U4JriQ"},
+    {"name": "Max Tech",        "tier": 2, "cat": "apple",    "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCptwuAv0XQHo1OQUSaO6NHw"},
+    {"name": "Alex Ziskind",    "tier": 1, "cat": "dev",      "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCajiMK_CY9icRhLepS8_3ug"},
+    {"name": "NetworkChuck",    "tier": 2, "cat": "dev",      "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC9x0AN7BWHpCDHSm9NiJFJQ"},
+    {"name": "Snazzy Labs",     "tier": 2, "cat": "apple",    "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCO2x-p9gg9TLKneXlibGR7w"},
+    {"name": "Dave2D",          "tier": 2, "cat": "apple",    "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCVYamHliCI9rw1tHR1xbkfw"},
+    {"name": "Fireship",        "tier": 2, "cat": "dev",      "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs9EqgamOA"},
 ]
 
 ITEMS_PER_FEED = 8
