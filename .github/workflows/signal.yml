@@ -1,0 +1,43 @@
+name: signal daily briefing
+
+on:
+  schedule:
+    - cron: '0 15 * * *'   # 7am PT (UTC-8 standard) / 8am PT (UTC-7 DST)
+  workflow_dispatch:         # allow manual run from GitHub Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run signal
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          python briefing.py \
+            --output index.html \
+            --slack \
+            --pages-url "https://rkremkau.github.io/Signal/"
+
+      - name: Commit and push index.html
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --staged --quiet || git commit -m "signal: $(date +'%Y-%m-%d')"
+          git push
