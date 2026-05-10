@@ -392,6 +392,15 @@ renderStats(); render();
     Path(output_path).write_text(html, encoding="utf-8")
     print(f"\n  ✓ written to {output_path}")
 
+def render_json(articles, output_path):
+    data = {
+        "generated": datetime.now(timezone.utc).isoformat(),
+        "count": len(articles),
+        "articles": articles,
+    }
+    Path(output_path).write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    print(f"  ✓ json written to {output_path}")
+
 # ── MAIN ──────────────────────────────────────────────────────────────────────
 
 def main():
@@ -426,6 +435,8 @@ def main():
 
     print("\n[3/3] rendering output...")
     render_html(scored, args.output)
+    json_path = str(args.output).replace(".html", ".json") if args.output.endswith(".html") else args.output + ".json"
+    render_json(scored, json_path)
 
     if args.open:
         import subprocess

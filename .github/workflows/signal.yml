@@ -2,7 +2,7 @@ name: signal daily briefing
 
 on:
   schedule:
-    - cron: '0 15 * * *'   # 7am PT (UTC-8 standard) / 8am PT (UTC-7 DST)
+    - cron: '0 12 * * *'   # 7am ET (UTC-5 standard) / 8am ET (UTC-4 DST)
   workflow_dispatch:         # allow manual run from GitHub Actions tab
 
 permissions:
@@ -40,6 +40,6 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           mkdir -p archive
           cp index.html archive/$(date +'%Y-%m-%d').html
-          git add index.html archive/
+          git add index.html signal.json archive/
           git diff --staged --quiet || git commit -m "signal: $(date +'%Y-%m-%d')"
           git push
