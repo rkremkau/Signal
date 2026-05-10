@@ -446,7 +446,7 @@ def main():
 
     print("\n[3/3] rendering output...")
     render_html(scored, args.output)
-    json_path = str(args.output).replace(".html", ".json") if args.output.endswith(".html") else args.output + ".json"
+    json_path = Path(args.output).parent / "signal.json"
     render_json(scored, json_path)
 
     if args.open:

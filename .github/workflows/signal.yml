@@ -40,10 +40,11 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           mkdir -p archive
           cp index.html archive/$(date +'%Y-%m-%d').html
-          git stash
+          git stash --include-untracked
           git pull --rebase origin main
           git stash pop
-          git add index.html signal.json archive/
+          git add index.html archive/
+          [ -f signal.json ] && git add signal.json
           git diff --staged --quiet && exit 0
           git commit -m "signal: $(date +'%Y-%m-%d')"
           git push
