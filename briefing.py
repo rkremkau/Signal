@@ -281,9 +281,26 @@ def post_slack(articles, webhook_url, pages_url=""):
 
 # ── RENDER HTML ───────────────────────────────────────────────────────────────
 
-def render_html(articles, output_path):
+def render_html(articles, output_path, archive_dates=None):
     now = datetime.now().strftime("%B %d, %Y at %I:%M %p")
     articles_json = json.dumps(articles, ensure_ascii=False)
+
+    archive_html = ""
+    if archive_dates:
+        links = []
+        for stem in archive_dates:
+            try:
+                dt = datetime.strptime(stem, "%Y-%m-%d")
+                label = dt.strftime("%b %-d")
+            except ValueError:
+                label = stem
+            links.append(f'<a class="arc-link" href="archive/{stem}.html">{label}</a>')
+        archive_html = (
+            '<div class="archive-nav">'
+            '<span class="arc-label">archive</span>'
+            + "".join(links) +
+            "</div>"
+        )
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -334,6 +351,10 @@ def render_html(articles, output_path):
   .yt {{ font-family: var(--mono); font-size: 10px; color: #ff4444; padding: 2px 6px; border-radius: 3px; background: rgba(255,68,68,0.1); }}
   .stats {{ font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 18px; padding: 10px 14px; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); display: flex; gap: 20px; flex-wrap: wrap; }}
   .stats span {{ color: var(--text); }}
+  .archive-nav {{ display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }}
+  .arc-label {{ font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 2px; }}
+  .arc-link {{ font-family: var(--mono); font-size: 11px; color: var(--muted); text-decoration: none; padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); transition: all 0.15s; }}
+  .arc-link:hover {{ color: var(--accent2); border-color: var(--accent); background: rgba(110,106,255,0.08); }}
 </style>
 </head>
 <body>
@@ -346,6 +367,7 @@ def render_html(articles, output_path):
     <div class="header-right">{now}</div>
   </div>
   <div class="stats" id="stats"></div>
+  {archive_html}
   <div class="filters">
     <span class="fp active" onclick="filterCat('all',this)">all</span>
     <span class="fp" onclick="filterCat('apple',this)">apple</span>
@@ -446,7 +468,12 @@ def main():
     print(f"  → {len(scored)} articles above threshold ({MIN_SCORE})")
 
     print("\n[3/3] rendering output...")
-    render_html(scored, args.output)
+    archive_dir = Path(args.output).parent / "archive"
+    archive_dates = sorted(
+        [p.stem for p in archive_dir.glob("*.html") if re.match(r"\d{4}-\d{2}-\d{2}", p.stem)],
+        reverse=True
+    )
+    render_html(scored, args.output, archive_dates)
     json_path = Path(args.output).parent / "signal.json"
     render_json(scored, json_path)
 
