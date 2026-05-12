@@ -472,7 +472,7 @@ def main():
     archive_dates = sorted(
         [p.stem for p in archive_dir.glob("*.html") if re.match(r"\d{4}-\d{2}-\d{2}", p.stem)],
         reverse=True
-    )
+    )[:7]
     render_html(scored, args.output, archive_dates)
     json_path = Path(args.output).parent / "signal.json"
     render_json(scored, json_path)
